@@ -1,0 +1,162 @@
+UE4快捷键：
+G 隐藏显示所有Actor
+F 聚焦选中的物体
+选中物体 + 按住alt+按住鼠标左键 = 以物体为中心旋转 
+end 可以将物体迅速降落到地面
+Ctrl+~ 切换世界坐标轴
+选中物体 + 按住shift拖动 = 镜头跟随物体移动
+F11 全屏
+Ctrl + 0~9   设置书签（游戏队伍编号哇哈哈哈~~），编队完可以直接按数字显示。
+L 快速生成点光源
+Ctrl+ G 成组
+shift+ G 解组
+Ctrl+ B 迅速找到资源位置
+
+UE4蓝图快捷键
+按住Alt 点击左键断开连接
+按住Alt 拖拽变量为设置
+按住Ctrl拖拽变量为获得
+
+UE4其他内容：
+1、导入模型注意什么？		不要勾选generate lightmap UVs（自动展lightmap的UV，UV要通过3dmax展开）
+                                不要勾选combine meshes（自动合并模型成一个）
+				碰撞手动添加：UCX_物体名称
+2、从3dmax导出模型注意什么？       勾选导出平滑组
+3、可以在左上角箭头处进行截屏
+
+UE4设置内容：
+1、如何修改编辑器UI显示语言？      编辑→编辑器偏好设置→区域&语言
+2、如何去掉自动曝光？              编辑→项目设置→rendering→Auto Exposure（有自动曝光的时候相机会自动调节灯光）
+3、如何设置项目相关？              编辑→项目设置→项目描述进行设置（缩略图要求192x192）
+
+
+UE4材质技巧：
+UE4不能导入自带透明度的图！！！！！（如果要有透明效果，请把背景设置为黑色）
+如果原图有高光，可以通过CB的diffuse贴图将高光去掉~~~~
+AO贴图连接→环境遮挡、DIS贴图连接(displacement)→世界位置偏移
+
+
+1、按住1点击左键生成constant（常量）     可连接到金属、粗糙度、高光等调节
+2、用一类材质可以使用“材质实例” 直接调整参数看到效果
+3、制作好的材质可以复制HLSL代码，直接粘贴到新的材质上面。
+4、可以通过PS直接建立拉丝金属效果   添加杂色→风→动感模糊
+5、制作划痕？               使用lerp（alpha连接黑白贴图，黑显示a，白显示b） 
+6、复杂材质混合颜色         使用lerp  
+7、将划痕单通道直接连接粗糙度可增加质感
+8、将混合图片中的元素单独处理？    使用黑白抠出的通道图→链接lerp的透明度→抠出完成
+9、可以通过PS直接建立水效果贴图     滤镜渲染云彩→滤镜库扭曲玻璃
+10、使用fresnel（菲涅尔）节点（链接lerp的Alpha通道）可以制作玻璃、水效果
+11、法线贴图叠加一般使用add
+12、节省图片空间，可以将几张图分别放到R、G、B通道（相当于3张图片）
+
+
+
+UE4场景技巧：
+1、可以使用球体反射捕获，营造反射的场景氛围
+2、光照导致贴图阴影出现错误时，可以调高静物里面的overridden Light Map Res的值（比如256、512等必须是2的倍数）
+
+
+
+
+UE4实例技巧：
+-----------制作普通材质流程：先看底材质（金木水火土）→加杂质（漫反射划痕、粗糙度划痕）→调整法线、AO→基本完成可用
+1、如何制作镜子？           新建Scene Capture 2D相机 → 新建RenderTarget（渲染目标）贴图
+                            →将贴图赋予相机→新建普通材质，将贴图赋予材质漫反射和高光
+                            →材质赋予物体，呈现镜子
+
+2、如何制作昼夜交替？       打开关卡蓝图 → 新建Event tick（事件tick）
+                            →新建AddActorLocalRotation （目标为场景Actor:Light Source）
+                            →新建Updata Sun Direction（目标为场景Actor:SkySphereBlueprint）
+                            →新建float+float，将event tick的Delta Seconds（事件tick的频率）
+                            与 新建的variable--float性（手动填写的速度）  相加
+                            →新建Make Rotator，并赋予参数Pitch上述的float+float得到的值（XYZ分别代表旋转的方向）
+                            →将Return的Value赋予AddActorLocalRotation的Delta Rotation，运行可看昼夜交替
+
+
+
+
+
+UE4材质节点说明：
+快捷键：
+1\2\3\4  1\2\3\4维数组
+E  Power(X,2)             X的2次幂，Power（幂）可以用作对比度调整，即，仅保留较亮的值
+R  Reflection Vector
+T  Texture Sample
+U  TexCoord[0]
+I  If
+O  1-x
+P  Panner
+
+A  Add(0,1)
+S  ScalarParameter
+D  Divide(1,2)
+F  Unspecified Function
+L  Lerp(0.1,0.5)          线性插值，alpha连接黑白贴图，黑显示a，白显示b，用于贴图混合（效果不同于Multiply）
+
+V  VectorParameter
+B  BumpOffset
+N  Normalize
+M  Multiply(0,1)
+
+
+
+UE4粒子系统说明：
+Sphere       在一个圆形范围内随机点出现
+orbit        扰动（每个粒子绕某一中心随机旋转）
+BeamData     用于制作激光类，source代表起始点、target代表终止点
+
+
+UE4 C++碰到的问题处理：
+1、移动项目文件之后导致了.sln加载部分内容失败。    解决方法：删除.sln、打开uproject、文件→更新C++代码即可。
+2、通过Editor快捷方式直接打开项目有时出错说找不到项目文件。     原因：文件目录中存在中文或者空格导致。
+
+
+
+UE4 控制台
+camera 相机style，参数： 
+  #static const FName NAME_Fixed = FName(TEXT("Fixed"));                               固定相机
+  #static const FName NAME_ThirdPerson = FName(TEXT("ThirdPerson"));                   第三人称
+  #static const FName NAME_FreeCam = FName(TEXT("FreeCam"));                           自由视角
+  #static const FName NAME_FreeCam_Default = FName(TEXT("FreeCam_Default"));         
+  #static const FName NAME_FirstPerson = FName(TEXT("FirstPerson"));                   第一人称
+show collision    查看碰撞体
+startmoviecapture 开始录制视频
+stopmoviecapture  停止录制视频
+HighResShot 1     截图（参数为倍数）
+HighResShot 1024x768  截图为1024x768
+Shot              简单截图（仅编辑器模式）
+
+UE4快捷方式
+UE4Editor.exe发送到桌面快捷方式→打开属性→在目标后面增加自己项目的路径。
+-debug      以debug版本打开工程
+-game       以游戏模式打开工程
+-ResX=1024  以1024*768打开工程
+-ResY=768
+-Fullscreen 全屏模式
+-windowed   窗口模式
+-log        打开游戏同时打开日志命令框
+-BENCHMARK  输出视频    
+-DUMPMOVIE  输出视频
+-FPS=40     输出视频帧数
+-MATINEEAVICAPTURE=FSDemo  输出视频名称为FSDemo
+-COMPRESSCAPTURE           压缩输出视频
+-MATINEESSCAPTURE          输出BMP格式序列帧
+-MATINEESSCAPTURE = JPG    输出JPG格式序列帧
+-MATINEESSCAPTURE = PNG    输出PNG格式序列帧
+-NoTextureStreaming        关闭图片缓冲（录制视频用） 
+
+UE4蓝图遇到的问题：
+1、使用montage set Next Section时，如果是通过AnimNotify触发第一次，则无效。
+   修改方法：将功能放到Montage Play之后直接触发，可解决问题。
+
+2、使用Disable Input时，注意Actor目标和Player Controller目标不同，如果相同则无效。
+   修改方法：Actor连接Get Player Pawn功能、Player Controller连接Get Player Controller可解决问题。
+
+
+
+
+
+
+UE4未解决问题：
+1、如何在释放laze的同时禁止移动和输入其他按钮
+ 
