@@ -1,0 +1,8 @@
+{
+	"Changelist" : 0,
+	"BuildId" : "93e648e8-a1a3-4766-9203-d8dc479d57c0",
+	"Modules" : 
+	{
+		"AudioCapture" : "UE4Editor-AudioCapture.dll"
+	}
+}
