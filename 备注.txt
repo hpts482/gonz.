@@ -19,4 +19,5 @@ bitbucket团队测试仓库：https://gongzheng1@bitbucket.org/MengIsJustice/something-
 bitbucket团队项目仓库：https://gongzheng1@bitbucket.org/MengIsJustice/gonz.1.git
 
 gz248842GZ
+appstore:Gz248842
 
