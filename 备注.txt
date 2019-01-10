@@ -1,14 +1,13 @@
-PR教程
-AU教程
-AE教程
 3DS教程
 UE4教程
 FL教程
 C++教程
+blender教程
 CG绘画基础教程
 乐理教程
 
 evermotion 模型库
+http://gameui.matme.info/blog/ UI资源网站
 http://www.rr-sc.com/   hpts482 Gz248842
 substance painter 2869-8852-7182-0548
 https://github.com/hpts482/gonz..git   github个人空间
